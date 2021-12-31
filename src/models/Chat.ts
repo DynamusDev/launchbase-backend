@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import User from "./User";
 
 @Entity("messages")
@@ -6,10 +6,10 @@ export default class Chat {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @OneToMany(() => User, (user) => user.messages, {
-    eager: true,
+  @ManyToOne(() => User, (user) => user.messages, {
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
+    eager: true,
   })
   author: User;
 

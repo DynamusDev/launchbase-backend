@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import Chat from "./Chat";
 
 @Entity("users")
@@ -21,7 +21,10 @@ export default class User {
   @Column({ nullable: true, type: "text" })
   image: string;
 
-  @ManyToOne((type) => Chat, (author) => User)
+  @OneToMany(() => Chat, (chat) => chat.author, {
+    onDelete: "SET NULL",
+    onUpdate: "CASCADE",
+  })
   messages: Chat[];
 
   @Column({ nullable: true, type: "text" })

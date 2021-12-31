@@ -6,6 +6,7 @@ import { auth } from "../config/auth";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import { transport } from "../config/sendMail";
+import { userRender } from "../views/user_view";
 
 export default {
   async create(request: Request, response: Response) {
@@ -22,6 +23,7 @@ export default {
     const usr = getRepository(User);
     const user = await usr.findOne({
       where: { email: email },
+      relations: ["messages"],
     });
 
     if (!user) {
@@ -75,7 +77,7 @@ export default {
             return response.status(201).json({
               status: 201,
               message: "Succesfuly",
-              user: user,
+              user: userRender(user),
               token: token,
             });
           }

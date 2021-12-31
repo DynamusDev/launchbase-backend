@@ -21,12 +21,8 @@ export function chatRenderMany(messages: Omit<Chat, "author.password">[]) {
     author: {
       id: message.author.id,
       name: message.author.name,
-      telephone_number: message.author.telephone_number,
       email: message.author.email,
-      master: message.author.master,
-      keyResponder: message.author.keyResponder,
       token_notification: message.author.token_notification,
-      starthos_user: message.author.starthos_user,
       image: message.author.image,
     },
   }));

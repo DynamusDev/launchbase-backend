@@ -3,6 +3,7 @@ import { getRepository } from "typeorm";
 import User from "../models/User";
 const bcrypt = require("bcryptjs");
 import { transport } from "../config/sendMail";
+import { userRender, userRenderMany } from "../views/user_view";
 
 export default {
   async create(request: Request, response: Response) {
@@ -107,7 +108,9 @@ Obrigado`,
       console.error(err);
     }
 
-    const user: any = await userRepository.findOne(id);
+    const user: any = await userRepository.findOne(id, {
+      relations: ["messages"],
+    });
     userRepository.merge(user, {
       name,
       phone,
@@ -126,7 +129,7 @@ Obrigado`,
     return response.status(200).json({
       status: 200,
       message: "Dados do usuário " + name + " foram atualizados!!!",
-      user,
+      user: userRender(user),
     });
   },
 
@@ -136,7 +139,9 @@ Obrigado`,
     const userRepository = getRepository(User);
     const { id } = request.params;
 
-    const user = await userRepository.findOneOrFail(id);
+    const user = await userRepository.findOneOrFail(id, {
+      relations: ["messages"],
+    });
 
     /* #swagger.responses[200] = { 
               schema: { $ref: "#/definitions/EspecificUser" },
@@ -146,7 +151,7 @@ Obrigado`,
     return response.status(200).json({
       status: 200,
       message: "Succesfuly",
-      user,
+      user: userRender(user),
     });
   },
 
@@ -155,7 +160,7 @@ Obrigado`,
     // #swagger.description = 'Endpoint para listar os usuários.'
     const userRepository = getRepository(User);
 
-    const users = await userRepository.find();
+    const users = await userRepository.find({ relations: ["messages"] });
 
     /* #swagger.responses[200] = { 
               schema: { $ref: "#/definitions/Users" },
@@ -165,7 +170,7 @@ Obrigado`,
     return response.status(200).json({
       status: 200,
       message: "Succesfuly",
-      users,
+      users: userRenderMany(users),
     });
   },
 

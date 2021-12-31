@@ -1,0 +1,1701 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.1",
+    "title": "Starthos API",
+    "description": "Documentação para a API da Starthos App."
+  },
+  "host": "starthos.herokuapp.com",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Session",
+      "description": "Login and Forgot-Password"
+    },
+    {
+      "name": "User",
+      "description": "Create, Edit, List and Delete"
+    },
+    {
+      "name": "Checklist Fuel",
+      "description": "Create and List"
+    },
+    {
+      "name": "Event",
+      "description": "Create and List"
+    },
+    {
+      "name": "Chat",
+      "description": "Create and List"
+    },
+    {
+      "name": "Location",
+      "description": "Create and List"
+    },
+    {
+      "name": "Profile",
+      "description": "Create and List"
+    },
+    {
+      "name": "Task",
+      "description": "Create and List"
+    },
+    {
+      "name": "Upload",
+      "description": "Upload of Image, Video and Audio files"
+    }
+  ],
+  "schemes": "http",
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/sessions": {
+      "patch": {
+        "tags": [
+          "Session"
+        ],
+        "description": "Endpoint para criar os usuários.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados de login",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/SuccessSession"
+            },
+            "message": "Succesfuly"
+          },
+          "401": {
+            "schema": {
+              "$ref": "#/definitions/ErrorSessionPassword"
+            },
+            "error": "Falha no Login, senha inválida",
+            "description": "Unauthorized"
+          },
+          "403": {
+            "schema": {
+              "$ref": "#/definitions/ErrorUserDeleted"
+            },
+            "error": "Este usuário não está mais cadastrado na nossa base de dados",
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/forgot_password": {
+      "patch": {
+        "tags": [
+          "Session"
+        ],
+        "description": "Endpoint para criar os usuários.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados de login",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/ForgotPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SuccessChangePass"
+            },
+            "message": "Uma nova senha foi enviada para o seu email!!!"
+          },
+          "403": {
+            "schema": {
+              "$ref": "#/definitions/ErrorUserDeleted"
+            },
+            "error": "Este usuário não está mais cadastrado na nossa base de dados",
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/category": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para criar categorias de eventos.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Categoria",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/CategoryTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            },
+            "message": "Categoria Cadastrada!!!"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para editar categorias de eventos.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/category/{id}": {
+      "patch": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para ____FUNC____ categorias de eventos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Categoria",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/CategoryTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para editar categorias de eventos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/types": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para criar tipos de Evento.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Tipo de evento",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/EventTypeTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/EventType"
+            },
+            "message": "Tipo de evento Cadastrado!!!"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para listar os tipos de Evento.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/EventType"
+            },
+            "message": "Tipo de evento Cadastrado!!!",
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/types/{id}": {
+      "delete": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para deletar tipos de Evento.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/DeletedType"
+            },
+            "message": "Succesfuly type ____FUNC____",
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/location": {
+      "post": {
+        "tags": [
+          "Location"
+        ],
+        "description": "Endpoint para cadastrar os aeroportos.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Location",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/LocationTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Location"
+        ],
+        "description": "Endpoint para cadastrar os aeroportos.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/location/{id}": {
+      "delete": {
+        "tags": [
+          "Location"
+        ],
+        "description": "Endpoint para cadastrar os aeroportos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Location"
+        ],
+        "description": "Endpoint para cadastrar os aeroportos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/SuccessLocation"
+            },
+            "message": "O Aeroporto foi cadastrado!!!",
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/chat": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "description": "Endpoint para enviar mensagens.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/ChatTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Chat"
+            }
+          }
+        }
+      }
+    },
+    "/chat/{room}": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "description": "Endpoint para listar as mensagens.",
+        "parameters": [
+          {
+            "name": "room",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Chat"
+            },
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/profiles": {
+      "post": {
+        "tags": [
+          "Profile"
+        ],
+        "description": "Endpoint para criar os perfis.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Profile",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/ProfileTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ProfileTemplate"
+            },
+            "message": "O perfil foi cadastrado!!!"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "description": "Endpoint para criar os perfis.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/profiles/{id}": {
+      "patch": {
+        "tags": [
+          "Profile"
+        ],
+        "description": "Endpoint para criar os perfis.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Profile",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/ProfileTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProfileTemplate"
+            },
+            "message": "O perfil foi cadastrado!!!"
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "post": {
+        "tags": [
+          "Task"
+        ],
+        "description": "Endpoint para criar novas tasks.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Task",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/TaskTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Task"
+            },
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Task"
+        ],
+        "description": "Endpoint para listar as tasks.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "patch": {
+        "tags": [
+          "Task"
+        ],
+        "description": "Endpoint para ____FUNC____ tasks.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Task",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/TaskTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Task"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Task"
+        ],
+        "description": "Endpoint para listar as tasks.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para criar os usuários.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/UserTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "message": "O usuário foi cadastrado!!!"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "schema": {
+              "$ref": "#/definitions/CreateError"
+            },
+            "error": "Esse usuário já existe",
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para listar os usuários.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            },
+            "message": "Succesfuly"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para alterar os dados do usuário.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/EditUserTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "message": "Dados do usuário foram atualizados!!!"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para mostrar um usuário específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EspecificUser"
+            },
+            "message": "Usuário encontrado"
+          }
+        }
+      }
+    },
+    "/users/delete/{id}": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para deletar um usuário.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuários Deletado",
+            "schema": {
+              "$ref": "#/definitions/DeletedUser"
+            }
+          }
+        }
+      }
+    },
+    "/events": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para criar os eventos.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/EventTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Chat"
+            }
+          }
+        }
+      }
+    },
+    "/events/{id}": {
+      "patch": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para mudar o estado do evento.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Atualizar evento",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/EditEventTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SuccessUpdateEvent"
+            },
+            "message": "O estado do evento foi atualizado"
+          }
+        }
+      }
+    },
+    "/events/{location}": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Endpoint para listar os eventos.",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Chat"
+            },
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/checklist/fuel": {
+      "post": {
+        "tags": [
+          "Checklist Fuel"
+        ],
+        "description": "Endpoint para realizar os checklists de abastecimento.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do abastecimento",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/ChecklistFuelTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Fuel"
+            },
+            "message": "Succesfuly",
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Checklist Fuel"
+        ],
+        "description": "Endpoint para listar os checklists de abastecimento.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FuelChecklists"
+            },
+            "message": "Succesfuly"
+          }
+        }
+      }
+    },
+    "/fuel": {
+      "post": {
+        "tags": [
+          "Checklist Fuel"
+        ],
+        "description": "Endpoint para cadastrar tipos de combustível.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do cumbustível",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/FuelTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/ChecklistFuel"
+            },
+            "message": "Succesfuly",
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Checklist Fuel"
+        ],
+        "description": "Endpoint para listar os tipos de combustível.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Fuel"
+            },
+            "message": "Succesfuly"
+          }
+        }
+      }
+    },
+    "/fuel/{id}": {
+      "patch": {
+        "tags": [
+          "Checklist Fuel"
+        ],
+        "description": "Endpoint para alterar os dados do tipo de combustível.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/EditFuelTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Fuel"
+            },
+            "message": "Succesfuly"
+          }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "tags": [
+          "Upload"
+        ],
+        "description": "Endpoint para fazer upload de arquivos.",
+        "parameters": [
+          {
+            "name": "image",
+            "in": "formData",
+            "required": true,
+            "description": "image",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {}
+    },
+    "Fuel": {
+      "type": "object",
+      "properties": {}
+    },
+    "ChecklistFuel": {
+      "type": "object",
+      "properties": {}
+    },
+    "Event": {
+      "type": "object",
+      "properties": {}
+    },
+    "EventType": {
+      "type": "object",
+      "properties": {}
+    },
+    "Category": {
+      "type": "object",
+      "properties": {}
+    },
+    "Task": {
+      "type": "object",
+      "properties": {}
+    },
+    "Chat": {
+      "type": "object",
+      "properties": {}
+    },
+    "UserTemplate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Alexandre Alves Nascimento"
+        },
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          }
+        },
+        "telephone_number": {
+          "type": "string",
+          "example": "11987611064"
+        },
+        "email": {
+          "type": "string",
+          "example": "alexandrenascimento@live.com"
+        },
+        "master": {
+          "type": "boolean",
+          "example": true
+        },
+        "keyResponder": {
+          "type": "boolean",
+          "example": true
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          }
+        },
+        "starthos_user": {
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "EventTypeTemplate": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "Obstrução na pista"
+        },
+        "category": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            }
+          }
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "EditUserTemplate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Alexandre Alves Nascimento"
+        },
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          }
+        },
+        "telephone_number": {
+          "type": "string",
+          "example": "11987611064"
+        },
+        "email": {
+          "type": "string",
+          "example": "alexandrenascimento@live.com"
+        },
+        "image": {
+          "type": "string",
+          "example": "https://img.icons8.com/officel/2x/person-male-skin-type-6.png"
+        },
+        "password": {
+          "type": "string",
+          "example": "q1w2e3r4"
+        }
+      }
+    },
+    "EditFuelTemplate": {
+      "type": "object",
+      "properties": {
+        "densit": {
+          "type": "number",
+          "example": 0.74
+        }
+      }
+    },
+    "EventTemplate": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "example": "2021-02-12"
+        },
+        "time": {
+          "type": "string",
+          "example": "09:00:00"
+        },
+        "type": {
+          "type": "number",
+          "example": 1
+        },
+        "prefix": {
+          "type": "string",
+          "example": "PR-MKM"
+        },
+        "description": {
+          "type": "string",
+          "example": "obstrução na pista"
+        },
+        "status": {
+          "type": "string",
+          "example": "ativo"
+        },
+        "user": {
+          "type": "number",
+          "example": 1
+        },
+        "cabeceira_dePouso": {
+          "type": "string",
+          "example": "l19"
+        },
+        "modelo_aeronave": {
+          "type": "string",
+          "example": "B3"
+        },
+        "numero_passageiros": {
+          "type": "string",
+          "example": "N/A"
+        },
+        "tipo_deCarga": {
+          "type": "string",
+          "example": "N/A"
+        },
+        "locations": {
+          "type": "number",
+          "example": 1
+        },
+        "category": {
+          "type": "number",
+          "example": 1
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "EditEventTemplate": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "finalizado"
+        },
+        "updatedBy": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "ChatTemplate": {
+      "type": "object",
+      "properties": {
+        "room": {
+          "type": "string",
+          "example": "PRG_8431"
+        },
+        "date": {
+          "type": "string",
+          "example": "2021-02-12"
+        },
+        "time": {
+          "type": "string",
+          "example": "09:00:00"
+        },
+        "message": {
+          "type": "string",
+          "example": "Hello guys"
+        },
+        "type": {
+          "type": "string",
+          "example": "text"
+        },
+        "author": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "ChecklistFuelTemplate": {
+      "type": "object",
+      "properties": {
+        "prefix": {
+          "type": "string",
+          "example": "PP-FFF"
+        },
+        "model": {
+          "type": "string",
+          "example": "B4"
+        },
+        "truck_board": {
+          "type": "string",
+          "example": "https://www.placascarplac.com/wp-content/uploads/sites/836/2017/06/ALUGUEL.png"
+        },
+        "fuel_type": {
+          "type": "number",
+          "example": 1
+        },
+        "amount": {
+          "type": "number",
+          "example": 350
+        },
+        "odometer_photo": {
+          "type": "string",
+          "example": "https://www.placascarplac.com/wp-content/uploads/sites/836/2017/06/ALUGUEL.png"
+        },
+        "date": {
+          "type": "string",
+          "example": "2021-02-12"
+        },
+        "time": {
+          "type": "string",
+          "example": "09:00:00"
+        },
+        "user_id": {
+          "type": "number",
+          "example": 1
+        },
+        "location": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "FuelTemplate": {
+      "type": "object",
+      "properties": {
+        "fuel": {
+          "type": "string",
+          "example": "JET-A1"
+        },
+        "densit": {
+          "type": "number",
+          "example": 0.84
+        }
+      }
+    },
+    "CategoryTemplate": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "example": "emergência"
+        }
+      }
+    },
+    "LocationTemplate": {
+      "type": "object",
+      "properties": {
+        "icao": {
+          "type": "string",
+          "example": "SBJD"
+        },
+        "airport": {
+          "type": "string",
+          "example": "Comandante Rolim Adolfo Amaro"
+        },
+        "latitude": {
+          "type": "number",
+          "example": -23.182255
+        },
+        "longitude": {
+          "type": "number",
+          "example": -46.943318
+        },
+        "city": {
+          "type": "string",
+          "example": "Jundiaí"
+        },
+        "state": {
+          "type": "string",
+          "example": "SP"
+        },
+        "image": {
+          "type": "string",
+          "example": "http://www.voa-sp.com.br/wp-content/uploads/2017/02/jundia.jpg"
+        }
+      }
+    },
+    "TaskTemplate": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "type": "string",
+          "example": "ligar para a polícia"
+        },
+        "phone": {
+          "type": "string",
+          "example": "190"
+        },
+        "backup_phone": {
+          "type": "string",
+          "example": "191"
+        },
+        "responsible": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "ProfileTemplate": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "string",
+          "example": "Developer"
+        }
+      }
+    },
+    "SuccessProfile": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 201
+        },
+        "message": {
+          "type": "string",
+          "example": "Perfil Criado!!!"
+        }
+      }
+    },
+    "SuccessLocation": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 201
+        },
+        "message": {
+          "type": "string",
+          "example": "Aeroporto Cadastrado!!!"
+        }
+      }
+    },
+    "SuccessEventType": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 201
+        },
+        "message": {
+          "type": "string",
+          "example": "Tipo de evento Cadastrado!!!"
+        }
+      }
+    },
+    "SuccessUpdateEvent": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "O estado do evento foi atualizado"
+        },
+        "event": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "authorization": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjEzNTczNzQ3LCJleHAiOjE2MTM2NjAxNDd9.3K2XUMOLtN8pLqQnHTx4reh_D87553KieZm8PFQOGV8"
+        }
+      }
+    },
+    "SendMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Comando enviado!!!"
+        }
+      }
+    },
+    "Sign": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Id Criado!!!"
+        }
+      }
+    },
+    "Session": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "alexandrenascimento@live.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "q1w2e3r4"
+        }
+      }
+    },
+    "ErrorSessionEmail": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 401
+        },
+        "error": {
+          "type": "string",
+          "example": "Este email não foi encontrado na nossa base de dados"
+        }
+      }
+    },
+    "ErrorUserDeleted": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 403
+        },
+        "error": {
+          "type": "string",
+          "example": "Este usuário não está mais cadastrado na nossa base de dados"
+        }
+      }
+    },
+    "ErrorToken": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 403
+        },
+        "error": {
+          "type": "string",
+          "example": "Informe o token"
+        }
+      }
+    },
+    "ErrorSessionPassword": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 401
+        },
+        "error": {
+          "type": "string",
+          "example": "Falha no Login, senha inválida"
+        }
+      }
+    },
+    "SuccessSession": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 201
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly"
+        },
+        "user": {
+          "type": "object",
+          "properties": {}
+        },
+        "token": {
+          "type": "string",
+          "example": "token"
+        }
+      }
+    },
+    "ForgotPassword": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "alexandrenascimento@live.com"
+        }
+      }
+    },
+    "SuccessChangePass": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Uma nova senha foi enviada para o seu email!!!"
+        }
+      }
+    },
+    "Users": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly"
+        },
+        "users": {
+          "type": "array",
+          "example": [],
+          "items": {}
+        }
+      }
+    },
+    "FuelChecklists": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly"
+        },
+        "checklists": {
+          "type": "array",
+          "example": [],
+          "items": {}
+        }
+      }
+    },
+    "EspecificUser": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly"
+        },
+        "user": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "CreateError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Esse usuário já existe"
+        }
+      }
+    },
+    "DeletedUser": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly user deleted"
+        }
+      }
+    },
+    "DeletedType": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "'Succesfuly type deleted"
+        }
+      }
+    }
+  }
+}

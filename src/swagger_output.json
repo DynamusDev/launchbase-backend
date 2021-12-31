@@ -1,0 +1,615 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.1",
+    "title": "Starthos API",
+    "description": "Documentação para a API launch base."
+  },
+  "host": "localhost:3333",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Session",
+      "description": "Login and Forgot-Password"
+    },
+    {
+      "name": "User",
+      "description": "Create, Edit, List and Delete"
+    },
+    {
+      "name": "Chat",
+      "description": "Create and List"
+    },
+    {
+      "name": "Upload",
+      "description": "Upload of Image, Video and Audio files"
+    }
+  ],
+  "schemes": "http",
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/sessions": {
+      "patch": {
+        "tags": [
+          "Session"
+        ],
+        "description": "Endpoint para criar os usuários.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados de login",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/SuccessSession"
+            },
+            "message": "Succesfuly"
+          },
+          "401": {
+            "schema": {
+              "$ref": "#/definitions/ErrorSessionPassword"
+            },
+            "error": "Falha no Login, senha inválida",
+            "description": "Unauthorized"
+          },
+          "403": {
+            "schema": {
+              "$ref": "#/definitions/ErrorUserDeleted"
+            },
+            "error": "Este usuário não está mais cadastrado na nossa base de dados",
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/forgot_password": {
+      "patch": {
+        "tags": [
+          "Session"
+        ],
+        "description": "Endpoint para criar os usuários.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados de login",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/ForgotPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SuccessChangePass"
+            },
+            "message": "Uma nova senha foi enviada para o seu email!!!"
+          },
+          "403": {
+            "schema": {
+              "$ref": "#/definitions/ErrorUserDeleted"
+            },
+            "error": "Este usuário não está mais cadastrado na nossa base de dados",
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/chat": {
+      "post": {
+        "tags": [
+          "Chat"
+        ],
+        "description": "Endpoint para enviar mensagens.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/ChatTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Chat"
+            }
+          }
+        }
+      }
+    },
+    "/chat/{room}": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "description": "Endpoint para listar as mensagens.",
+        "parameters": [
+          {
+            "name": "room",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Chat"
+            },
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para criar os usuários.",
+        "parameters": [
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/UserTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "message": "O usuário foi cadastrado!!!"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "schema": {
+              "$ref": "#/definitions/CreateError"
+            },
+            "error": "Esse usuário já existe",
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para listar os usuários.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            },
+            "message": "Succesfuly"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para alterar os dados do usuário.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Data",
+            "in": "body",
+            "required": true,
+            "description": "Dados do usuário",
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/EditUserTemplate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "message": "Dados do usuário foram atualizados!!!"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para mostrar um usuário específico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EspecificUser"
+            },
+            "message": "Usuário encontrado"
+          }
+        }
+      }
+    },
+    "/users/delete/{id}": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para deletar um usuário.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuários Deletado",
+            "schema": {
+              "$ref": "#/definitions/DeletedUser"
+            }
+          }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "tags": [
+          "Upload"
+        ],
+        "description": "Endpoint para fazer upload de arquivos.",
+        "parameters": [
+          {
+            "name": "image",
+            "in": "formData",
+            "required": true,
+            "description": "image",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {}
+    },
+    "Chat": {
+      "type": "object",
+      "properties": {}
+    },
+    "UserTemplate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Alexandre Alves Nascimento"
+        },
+        "password": {
+          "type": "string",
+          "example": "q1w2e3r4"
+        },
+        "phone": {
+          "type": "string",
+          "example": "11987611064"
+        },
+        "email": {
+          "type": "string",
+          "example": "alexandrenascimento@live.com"
+        }
+      }
+    },
+    "EditUserTemplate": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Alexandre Alves Nascimento"
+        },
+        "phone": {
+          "type": "string",
+          "example": "11987611064"
+        },
+        "email": {
+          "type": "string",
+          "example": "alexandrenascimento@live.com"
+        },
+        "image": {
+          "type": "string",
+          "example": "https://img.icons8.com/officel/2x/person-male-skin-type-6.png"
+        },
+        "password": {
+          "type": "string",
+          "example": "q1w2e3r4"
+        }
+      }
+    },
+    "ChatTemplate": {
+      "type": "object",
+      "properties": {
+        "room": {
+          "type": "string",
+          "example": "PRG_8431"
+        },
+        "date": {
+          "type": "string",
+          "example": "2021-02-12"
+        },
+        "time": {
+          "type": "string",
+          "example": "09:00:00"
+        },
+        "message": {
+          "type": "string",
+          "example": "Hello guys"
+        },
+        "type": {
+          "type": "string",
+          "example": "text"
+        },
+        "author": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "authorization": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjEzNTczNzQ3LCJleHAiOjE2MTM2NjAxNDd9.3K2XUMOLtN8pLqQnHTx4reh_D87553KieZm8PFQOGV8"
+        }
+      }
+    },
+    "Session": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "alexandrenascimento@live.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "q1w2e3r4"
+        }
+      }
+    },
+    "ErrorSessionEmail": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 401
+        },
+        "error": {
+          "type": "string",
+          "example": "Este email não foi encontrado na nossa base de dados"
+        }
+      }
+    },
+    "ErrorUserDeleted": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 403
+        },
+        "error": {
+          "type": "string",
+          "example": "Este usuário não está mais cadastrado na nossa base de dados"
+        }
+      }
+    },
+    "ErrorToken": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 403
+        },
+        "error": {
+          "type": "string",
+          "example": "Informe o token"
+        }
+      }
+    },
+    "ErrorSessionPassword": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 401
+        },
+        "error": {
+          "type": "string",
+          "example": "Falha no Login, senha inválida"
+        }
+      }
+    },
+    "SuccessSession": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 201
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly"
+        },
+        "user": {
+          "type": "object",
+          "properties": {}
+        },
+        "token": {
+          "type": "string",
+          "example": "token"
+        }
+      }
+    },
+    "ForgotPassword": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "alexandrenascimento@live.com"
+        }
+      }
+    },
+    "SuccessChangePass": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Uma nova senha foi enviada para o seu email!!!"
+        }
+      }
+    },
+    "Users": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly"
+        },
+        "users": {
+          "type": "array",
+          "example": [],
+          "items": {}
+        }
+      }
+    },
+    "EspecificUser": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly"
+        },
+        "user": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "CreateError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Esse usuário já existe"
+        }
+      }
+    },
+    "DeletedUser": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "Succesfuly user deleted"
+        }
+      }
+    },
+    "DeletedType": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "number",
+          "example": 200
+        },
+        "message": {
+          "type": "string",
+          "example": "'Succesfuly type deleted"
+        }
+      }
+    }
+  }
+}

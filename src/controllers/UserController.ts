@@ -59,28 +59,10 @@ export default {
               error: 'Esse usuário já existe' 
       } */
 
-      const emailASerEnviado = {
-        from: "naorespondastarthos@gmail.com",
-        to: email,
-        subject: "Acesso - Launchbase",
-        text: `Você foi cadastrado em nosso sistema e uma senha foi gerada automaticamente. Para acessar basta colocar as credenciais abaixo\n
-Login: ${email}
-Senha: ${password} \n
-(fique atento com as letras minúsculas e maiúsculas)\n
-Você ja pode logar na sua conta com sua senha nova e poderá trocar a senha através do painel no botão de acesso "editar".\n
-Obrigado`,
-      };
-
-      transport.sendMail(emailASerEnviado, function (err: any) {
-        if (err) {
-          console.log(err);
-        } else {
-          return response.status(201).json({
-            status: 201,
-            message: "Succesfuly",
-            user: newUser,
-          });
-        }
+      return response.status(201).json({
+        status: 201,
+        message: "Succesfuly",
+        user: newUser,
       });
     }
   },

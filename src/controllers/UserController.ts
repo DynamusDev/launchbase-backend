@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import User from "../models/User";
 const bcrypt = require("bcryptjs");
-import { transport } from "../config/sendMail";
 import { userRender, userRenderMany } from "../views/user_view";
 
 export default {

@@ -97,6 +97,7 @@ export default {
       phone,
       email,
       password: hashedPassword,
+      createdAt: Date.now(),
       image,
     });
 

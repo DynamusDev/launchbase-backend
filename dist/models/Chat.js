@@ -22,9 +22,9 @@ __decorate([
 ], Chat.prototype, "id", void 0);
 __decorate([
     typeorm_1.ManyToOne(() => User_1.default, (user) => user.messages, {
-        eager: true,
         onDelete: "SET NULL",
         onUpdate: "CASCADE",
+        eager: true,
     }),
     __metadata("design:type", User_1.default)
 ], Chat.prototype, "author", void 0);

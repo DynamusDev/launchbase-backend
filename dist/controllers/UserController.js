@@ -5,9 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const User_1 = __importDefault(require("../models/User"));
-const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
-const sendMail_1 = require("../config/sendMail");
+const user_view_1 = require("../views/user_view");
 exports.default = {
     async create(request, response) {
         // #swagger.tags = ['User']
@@ -19,7 +18,7 @@ exports.default = {
                   type: 'object',
                   schema: { $ref: "#/definitions/UserTemplate" },
         } */
-        const { name, position, telephone_number, email, master, keyResponder, locations, starthos_user, } = request.body;
+        const { name, phone, email, password } = request.body;
         const userRepository = typeorm_1.getRepository(User_1.default);
         const user = await userRepository.findOne({ email: email });
         if (user) {
@@ -33,7 +32,6 @@ exports.default = {
             });
         }
         else {
-            const password = crypto.randomBytes(6).toString("hex");
             let hashedPassword;
             try {
                 hashedPassword = await bcrypt.hash(password, 12);
@@ -43,15 +41,10 @@ exports.default = {
             }
             const newUser = userRepository.create({
                 name,
-                position,
-                telephone_number,
+                phone,
                 email,
                 password: hashedPassword,
                 image: "https://img.icons8.com/ios/344/user.png",
-                master,
-                keyResponder,
-                locations,
-                starthos_user,
             });
             await userRepository.save(newUser);
             /* #swagger.responses[200] = {
@@ -62,35 +55,22 @@ exports.default = {
                     schema: { $ref: "#/definitions/CreateError" },
                     error: 'Esse usuário já existe'
             } */
-            const emailASerEnviado = {
-                from: "naorespondastarthos@gmail.com",
-                to: email,
-                subject: "Acesso - Starthos",
-                text: `Você foi cadastrado em nosso sistema e uma senha foi gerada automaticamente. Para acessar basta colocar as credenciais abaixo\n
-Login: ${email}
-Senha: ${password} \n
-(fique atento com as letras minúsculas e maiúsculas)\n
-Você ja pode logar na sua conta com sua senha nova e poderá trocar a senha através do painel no botão de acesso "editar".\n
-Obrigado,
-Equipe Starthos`,
-            };
-            sendMail_1.transport.sendMail(emailASerEnviado, function (err) {
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    return response.status(201).json({
-                        status: 201,
-                        message: "Succesfuly",
-                        user: newUser,
-                    });
-                }
+            return response.status(201).json({
+                status: 201,
+                message: "Succesfuly",
+                user: newUser,
             });
         }
     },
     async edit(request, response) {
         // #swagger.tags = ['User']
         // #swagger.description = 'Endpoint para alterar os dados do usuário.'
+        /* #swagger.parameters['Authorization'] = {
+                  in: 'header',
+                  required: true,
+                  description: 'Chave da api',
+                  type: 'string',
+        } */
         /* #swagger.parameters['Data'] = {
                   in: 'body',
                   required: true,
@@ -99,7 +79,7 @@ Equipe Starthos`,
                   schema: { $ref: "#/definitions/EditUserTemplate" },
         } */
         const { id } = request.params;
-        const { name, position, telephone_number, email, password, image } = request.body;
+        const { name, phone, email, password, image } = request.body;
         const userRepository = typeorm_1.getRepository(User_1.default);
         let hashedPassword;
         try {
@@ -109,14 +89,14 @@ Equipe Starthos`,
             console.error(err);
         }
         const user = await userRepository.findOne(id, {
-            relations: ["locations", "position"],
+            relations: ["messages"],
         });
         userRepository.merge(user, {
             name,
-            position,
-            telephone_number,
+            phone,
             email,
             password: hashedPassword,
+            createdAt: Date.now(),
             image,
         });
         await userRepository.save(user);
@@ -127,16 +107,22 @@ Equipe Starthos`,
         return response.status(200).json({
             status: 200,
             message: "Dados do usuário " + name + " foram atualizados!!!",
-            user,
+            user: user_view_1.userRender(user),
         });
     },
     async especific(request, response) {
         // #swagger.tags = ['User']
         // #swagger.description = 'Endpoint para mostrar um usuário específico'
+        /* #swagger.parameters['Authorization'] = {
+                  in: 'header',
+                  required: true,
+                  description: 'Chave da api',
+                  type: 'string',
+        } */
         const userRepository = typeorm_1.getRepository(User_1.default);
         const { id } = request.params;
         const user = await userRepository.findOneOrFail(id, {
-            relations: ["locations", "position"],
+            relations: ["messages"],
         });
         /* #swagger.responses[200] = {
                   schema: { $ref: "#/definitions/EspecificUser" },
@@ -145,17 +131,20 @@ Equipe Starthos`,
         return response.status(200).json({
             status: 200,
             message: "Succesfuly",
-            user,
+            user: user_view_1.userRender(user),
         });
     },
     async index(request, response) {
         // #swagger.tags = ['User']
         // #swagger.description = 'Endpoint para listar os usuários.'
+        /* #swagger.parameters['Authorization'] = {
+                  in: 'header',
+                  required: true,
+                  description: 'Chave da api',
+                  type: 'string',
+        } */
         const userRepository = typeorm_1.getRepository(User_1.default);
-        const { id } = request.params;
-        const users = await userRepository.find({
-            relations: ["locations", "position"],
-        });
+        const users = await userRepository.find({ relations: ["messages"] });
         /* #swagger.responses[200] = {
                   schema: { $ref: "#/definitions/Users" },
                   message: 'Succesfuly'
@@ -163,12 +152,18 @@ Equipe Starthos`,
         return response.status(200).json({
             status: 200,
             message: "Succesfuly",
-            users,
+            users: user_view_1.userRenderMany(users),
         });
     },
     async delete(request, response) {
         // #swagger.tags = ['User']
         // #swagger.description = 'Endpoint para deletar um usuário.'
+        /* #swagger.parameters['Authorization'] = {
+                  in: 'header',
+                  required: true,
+                  description: 'Chave da api',
+                  type: 'string',
+        } */
         const userRepository = typeorm_1.getRepository(User_1.default);
         const { id } = request.params;
         const user = await userRepository.findOneOrFail(id);

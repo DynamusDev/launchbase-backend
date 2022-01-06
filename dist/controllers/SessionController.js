@@ -10,6 +10,7 @@ const auth_1 = require("../config/auth");
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const sendMail_1 = require("../config/sendMail");
+const user_view_1 = require("../views/user_view");
 exports.default = {
     async create(request, response) {
         // #swagger.tags = ['Session']
@@ -25,7 +26,7 @@ exports.default = {
         const usr = typeorm_1.getRepository(User_1.default);
         const user = await usr.findOne({
             where: { email: email },
-            relations: ["locations", "position"],
+            relations: ["messages"],
         });
         if (!user) {
             /* #swagger.responses[403] = {
@@ -63,7 +64,7 @@ exports.default = {
                         });
                     }
                     else {
-                        const token = jsonwebtoken_1.default.sign({ id: user.id }, auth_1.auth.secret, {
+                        const token = jsonwebtoken_1.default.sign({ user: user_view_1.userRender(user) }, auth_1.auth.secret, {
                             expiresIn: 86400,
                         });
                         usr.merge(user, {
@@ -77,7 +78,7 @@ exports.default = {
                         return response.status(201).json({
                             status: 201,
                             message: "Succesfuly",
-                            user: user,
+                            user: user_view_1.userRender(user),
                             token: token,
                         });
                     }
@@ -136,14 +137,13 @@ exports.default = {
                 const emailASerEnviado = {
                     from: "naorespondastarthos@gmail.com",
                     to: email,
-                    subject: "Esqueci Minha Senha - Starthos",
+                    subject: "Esqueci Minha Senha - Launchbase",
                     text: `Você solicitou a alteração de senha no nosso app e uma nova senha foi gerada automaticamente.\n
 Login: ${email}
 Senha: ${newPassword} \n
 (fique atento com as letras minúsculas e maiúsculas)\n
 Você ja pode logar na sua conta com sua senha nova e poderá trocar a senha através do painel no botão de acesso "editar".\n
-Obrigado,
-Equipe Starthos`,
+Obrigado`,
                 };
                 sendMail_1.transport.sendMail(emailASerEnviado, function (err) {
                     if (err) {

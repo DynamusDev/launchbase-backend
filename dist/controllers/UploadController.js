@@ -4,6 +4,12 @@ exports.default = {
     async create(request, response) {
         // #swagger.tags = ['Upload']
         // #swagger.description = 'Endpoint para fazer upload de arquivos.'
+        /* #swagger.parameters['Authorization'] = {
+                  in: 'header',
+                  required: true,
+                  description: 'Chave da api',
+                  type: 'string',
+        } */
         /* #swagger.parameters['multipart/form-data'] = {
                   in: 'formData',
                   required: true,
@@ -11,10 +17,10 @@ exports.default = {
                   description: 'image',
                   type: 'file',
         } */
-        const { location: url = '' } = request.file;
+        const { location: url = "" } = request.file;
         return response.status(200).json({
             status: 200,
-            url
+            url,
         });
-    }
+    },
 };

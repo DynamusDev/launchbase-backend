@@ -11,6 +11,12 @@ exports.default = {
     async create(request, response) {
         // #swagger.tags = ['Chat']
         // #swagger.description = 'Endpoint para enviar mensagens.'
+        /* #swagger.parameters['Authorization'] = {
+                  in: 'header',
+                  required: true,
+                  description: 'Chave da api',
+                  type: 'string',
+        } */
         /* #swagger.parameters['Data'] = {
                   in: 'body',
                   required: true,
@@ -31,7 +37,6 @@ exports.default = {
         const chat = chatRepository.create(data);
         const auth = await userRepository.find({
             where: { id: author },
-            relations: ["locations", "position"],
         });
         await chatRepository.save(chat);
         const socketData = {
@@ -55,6 +60,12 @@ exports.default = {
     async index(request, response) {
         // #swagger.tags = ['Chat']
         // #swagger.description = 'Endpoint para listar as mensagens.'
+        /* #swagger.parameters['Authorization'] = {
+                  in: 'header',
+                  required: true,
+                  description: 'Chave da api',
+                  type: 'string',
+        } */
         const { room } = request.params;
         const chatRepository = typeorm_1.getRepository(Chat_1.default);
         const chat = await chatRepository.find({ where: { room: room } });

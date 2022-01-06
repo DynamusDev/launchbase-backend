@@ -18,13 +18,6 @@ const doc = {
   host: process.env.SWAGGER_HOST,
   basePath: "/",
   schemes: process.env.PROTOCOL,
-  securityDefinitions: {
-    Bearer: {
-      type: "apiKey",
-      name: "Authorization",
-      in: "header",
-    },
-  },
   consumes: ["application/json"],
   produces: ["application/json"],
   tags: [

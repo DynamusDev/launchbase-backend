@@ -26,13 +26,6 @@
     }
   ],
   "schemes": "http",
-  "securityDefinitions": {
-    "Bearer": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
-    }
-  },
   "consumes": [
     "application/json"
   ],
@@ -133,6 +126,13 @@
         "description": "Endpoint para enviar mensagens.",
         "parameters": [
           {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Chave da api",
+            "type": "string"
+          },
+          {
             "name": "Data",
             "in": "body",
             "required": true,
@@ -164,6 +164,13 @@
             "name": "room",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Chave da api",
             "type": "string"
           }
         ],
@@ -223,7 +230,15 @@
           "User"
         ],
         "description": "Endpoint para listar os usuários.",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Chave da api",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -246,6 +261,13 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Chave da api",
             "type": "string"
           },
           {
@@ -280,6 +302,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Chave da api",
+            "type": "string"
           }
         ],
         "responses": {
@@ -305,6 +334,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Chave da api",
+            "type": "string"
           }
         ],
         "responses": {
@@ -324,6 +360,13 @@
         ],
         "description": "Endpoint para fazer upload de arquivos.",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Chave da api",
+            "type": "string"
+          },
           {
             "name": "image",
             "in": "formData",

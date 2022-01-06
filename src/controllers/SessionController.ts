@@ -60,7 +60,7 @@ export default {
               error: "Falha no Login, senha inválida",
             });
           } else {
-            const token = jwt.sign({ id: user.id }, auth.secret, {
+            const token = jwt.sign({ user: userRender(user) }, auth.secret, {
               expiresIn: 86400,
             });
 

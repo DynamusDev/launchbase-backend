@@ -69,6 +69,12 @@ export default {
   async edit(request: Request, response: Response) {
     // #swagger.tags = ['User']
     // #swagger.description = 'Endpoint para alterar os dados do usuário.'
+    /* #swagger.parameters['Authorization'] = {
+              in: 'header',
+              required: true,
+              description: 'Chave da api',
+              type: 'string',
+    } */
     /* #swagger.parameters['Data'] = {
               in: 'body',
               required: true,
@@ -118,6 +124,12 @@ export default {
   async especific(request: Request, response: Response) {
     // #swagger.tags = ['User']
     // #swagger.description = 'Endpoint para mostrar um usuário específico'
+    /* #swagger.parameters['Authorization'] = {
+              in: 'header',
+              required: true,
+              description: 'Chave da api',
+              type: 'string',
+    } */
     const userRepository = getRepository(User);
     const { id } = request.params;
 
@@ -140,6 +152,12 @@ export default {
   async index(request: Request, response: Response) {
     // #swagger.tags = ['User']
     // #swagger.description = 'Endpoint para listar os usuários.'
+    /* #swagger.parameters['Authorization'] = {
+              in: 'header',
+              required: true,
+              description: 'Chave da api',
+              type: 'string',
+    } */
     const userRepository = getRepository(User);
 
     const users = await userRepository.find({ relations: ["messages"] });
@@ -159,6 +177,12 @@ export default {
   async delete(request: Request, response: Response) {
     // #swagger.tags = ['User']
     // #swagger.description = 'Endpoint para deletar um usuário.'
+    /* #swagger.parameters['Authorization'] = {
+              in: 'header',
+              required: true,
+              description: 'Chave da api',
+              type: 'string',
+    } */
     const userRepository = getRepository(User);
     const { id } = request.params;
 

@@ -14,13 +14,18 @@ const upload = multer(uploadConfig);
 routes.patch("/sessions", SessionController.create); //Criar Sessão(LOGIN)
 routes.patch("/forgot_password", SessionController.forgotPassword); //Esqueci minha senha
 
-routes.post("/chat", ChatController.create); // Enviar mensagem
-routes.get("/chat/:room", ChatController.index); // Carregas mensagens do chat
+routes.post("/chat", verifyJWT, ChatController.create); // Enviar mensagem
+routes.get("/chat/:room", verifyJWT, ChatController.index); // Carregas mensagens do chat
 
 routes.post("/users", UserController.create); // Criar usuário
-routes.patch("/users/:id", UserController.edit); // editar com senha
-routes.get("/users", UserController.index); // Listar Usuários
-routes.get("/users/:id", UserController.especific);
-routes.delete("/users/delete/:id", UserController.delete); // editar
+routes.patch("/users/:id", verifyJWT, verifyJWT, UserController.edit); // editar com senha
+routes.get("/users", verifyJWT, UserController.index); // Listar Usuários
+routes.get("/users/:id", verifyJWT, UserController.especific);
+routes.delete("/users/delete/:id", verifyJWT, UserController.delete); // editar
 
-routes.post("/upload", upload.single("image"), UploadController.create);
+routes.post(
+  "/upload",
+  verifyJWT,
+  upload.single("image"),
+  UploadController.create
+);

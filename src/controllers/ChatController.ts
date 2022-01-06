@@ -8,6 +8,12 @@ export default {
   async create(request: Request, response: Response) {
     // #swagger.tags = ['Chat']
     // #swagger.description = 'Endpoint para enviar mensagens.'
+    /* #swagger.parameters['Authorization'] = {
+              in: 'header',
+              required: true,
+              description: 'Chave da api',
+              type: 'string',
+    } */
     /* #swagger.parameters['Data'] = {
               in: 'body',
               required: true,
@@ -60,6 +66,12 @@ export default {
   async index(request: Request, response: Response) {
     // #swagger.tags = ['Chat']
     // #swagger.description = 'Endpoint para listar as mensagens.'
+    /* #swagger.parameters['Authorization'] = {
+              in: 'header',
+              required: true,
+              description: 'Chave da api',
+              type: 'string',
+    } */
     const { room } = request.params;
     const chatRepository = getRepository(Chat);
     const chat = await chatRepository.find({ where: { room: room } });

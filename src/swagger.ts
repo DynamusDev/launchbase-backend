@@ -12,7 +12,7 @@ const endpointsFiles = [
 const doc = {
   info: {
     version: "1.0.1",
-    title: "Starthos API",
+    title: "Launchbase API",
     description: "Documentação para a API launch base.",
   },
   host: process.env.SWAGGER_HOST,

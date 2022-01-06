@@ -6,17 +6,21 @@ export function verifyJWT(req: Request, res: Response, next: () => void) {
   var token = req.body.token || req.query.token || req.headers["authorization"];
 
   if (token) {
-    jwt.verify(token, auth.secret, (err: any, decoded: any) => {
-      if (err) {
-        return res.json({
-          success: false,
-          message: "A autenticação com o token falhou.",
-        });
-      } else {
-        (<any>req).decoded = decoded;
-        next();
+    jwt.verify(
+      token.replace("Bearer ", ""),
+      auth.secret,
+      (err: any, decoded: any) => {
+        if (err) {
+          return res.json({
+            success: false,
+            message: "A autenticação com o token falhou.",
+          });
+        } else {
+          (<any>req).decoded = decoded;
+          next();
+        }
       }
-    });
+    );
   } else {
     return res.status(403).send({
       success: false,

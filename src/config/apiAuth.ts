@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { auth } from "../config/auth";
 
 export function verifyJWT(req: Request, res: Response, next: () => void) {
-  var token = req.body.token || req.query.token || req.headers["Authorization"];
+  var token = req.body.token || req.query.token || req.headers["authorization"];
 
   if (token) {
     jwt.verify(
